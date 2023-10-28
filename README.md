@@ -99,7 +99,7 @@ Both the Phoenix and NextJS servers will start, and their logs will display in y
 
 ### Overview
 
-The Chat route at /chat provides users with an interactive platform to engage in real-time conversations.
+The Chat route at [/chat](localhost:3000/chat) provides users with an interactive platform to engage in real-time conversations.
 
 ### Features
 
