@@ -1,14 +1,14 @@
 import dynamic from "next/dynamic";
 
 // Load Dictaphone component only on the client side
-const Chat = dynamic(() => import("~/components/Chat"), {
+const Dictaphone = dynamic(() => import("~/components/Dictaphone"), {
   ssr: false,
 });
 
 function MyComponent() {
   return (
     <div>
-      <Chat />
+      <Dictaphone />
     </div>
   );
 }
