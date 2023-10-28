@@ -106,6 +106,14 @@ The Chat route at [/chat](localhost:3000/chat) provides users with an interactiv
 - Live Messaging: Users can exchange messages in real-time.
 - Dynamic Username: Before sending messages, each participant can specify their desired username.
 - Connection Status: The "Send Message" button is intuitive. It remains inactive until a websocket connection is established and a username is input, ensuring that messages are only sent when conditions are optimal.
+- Message dictation: Users can speak to dictate messages. This uses the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API).
+  - This currently only works on Chrome or Safari based browsers, but polyfills are available to add the missing support in other browsers.
+  - [AWS polyfill](https://github.com/ceuk/speech-recognition-aws-polyfill#:~:text=,AWS%20Transcribe%20as%20a%20fallback)
+  - [Azure polyfill](https://github.com/compulim/web-speech-cognitive-services)
+
+### What it Looks Like
+
+![chat_screenshot](image/README/chat_screenshot.png)
 
 ### How to Access
 
@@ -114,4 +122,4 @@ Alternatively, you can access it directly by typing in the /chat endpoint in the
 
 ### Technical Details
 
-This route employs Phoenix Channels websocket for real-time bi-directional communication. When the backend broadcasts messages, they are captured and promptly displayed on the frontend for all active participants in the chat room.
+This app employs Phoenix Channels websocket for real-time bi-directional communication. When the backend broadcasts messages, they are captured and promptly displayed on the frontend for all active participants in the chat room.
