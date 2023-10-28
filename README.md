@@ -87,7 +87,16 @@ mix ecto.setup
 mix phx.server
 ```
 
-Now, both apps should be running and you can test the live closed captioning flow!
+### Running Both Applications for Development
+
+For a streamlined local development experience, we've provided a script that runs both the Phoenix and NextJS applications simultaneously.
+Using the Development Script:
+
+```shell
+./start-dev.sh
+```
+
+Both the Phoenix and NextJS servers will start, and their logs will display in your terminal. To stop both servers, use CTRL+C in your terminal, which will terminate both processes.
 
 ---
 
