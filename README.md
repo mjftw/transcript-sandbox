@@ -12,11 +12,11 @@ Here's a visual representation of the system flow using a Mermaid diagram:
 
 ```mermaid
 sequenceDiagram
+    participant SpeechlyAPI as Speechly API
     participant BrowserA as Browser A
+    participant BrowserB as Browser B
     participant NextJSBackend as NextJS Backend
     participant PhoenixServer as Phoenix Server
-    participant SpeechlyAPI as Speechly API
-    participant BrowserB as Browser B
 
     BrowserA->>+NextJSBackend: Request page load
     NextJSBackend->>BrowserA: Serve page
