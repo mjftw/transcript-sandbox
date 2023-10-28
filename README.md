@@ -95,6 +95,23 @@ Using the Development Script:
 
 Both the Phoenix and NextJS servers will start, and their logs will display in your terminal. To stop both servers, use CTRL+C in your terminal, which will terminate both processes.
 
----
+## Chat Route (/chat)
 
-This `README.md` provides a clear introduction and guide to the project, offering context and step-by-step instructions for developers. Modify it as needed to fit any additional specifications or requirements.
+### Overview
+
+The Chat route at /chat provides users with an interactive platform to engage in real-time conversations.
+
+### Features
+
+- Live Messaging: Users can exchange messages in real-time.
+- Dynamic Username: Before sending messages, each participant can specify their desired username.
+- Connection Status: The "Send Message" button is intuitive. It remains inactive until a websocket connection is established and a username is input, ensuring that messages are only sent when conditions are optimal.
+
+### How to Access
+
+From the main dashboard or homepage, locate and click on the "Chat" link or button.
+Alternatively, you can access it directly by typing in the /chat endpoint in the browser's address bar.
+
+### Technical Details
+
+This route employs Phoenix Channels websocket for real-time bi-directional communication. When the backend broadcasts messages, they are captured and promptly displayed on the frontend for all active participants in the chat room.
