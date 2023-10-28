@@ -15,16 +15,16 @@ sequenceDiagram
     participant SpeechlyAPI as Speechly API
     participant BrowserA as Browser A
     participant BrowserB as Browser B
-    participant NextJSBackend as NextJS Backend
+    participant NextJSServer as NextJS Server
     participant PhoenixServer as Phoenix Server
 
-    BrowserA->>+NextJSBackend: Request page load
-    NextJSBackend->>BrowserA: Serve page
+    BrowserA->>+NextJSServer: Request page load
+    NextJSServer->>BrowserA: Serve page
     BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
     PhoenixServer->>BrowserA: Acknowledge Connection
 
-    BrowserB->>+NextJSBackend: Request page load
-    NextJSBackend->>BrowserB: Serve page
+    BrowserB->>+NextJSServer: Request page load
+    NextJSServer->>BrowserB: Serve page
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
     PhoenixServer->>BrowserB: Acknowledge Connection
 
