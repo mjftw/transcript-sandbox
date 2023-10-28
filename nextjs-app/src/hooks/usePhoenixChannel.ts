@@ -1,12 +1,8 @@
-import { on } from "events";
 import { Channel, Socket } from "phoenix";
-import React, { useState, useEffect } from "react";
-import useOnMount from "~/hooks/useOnMount";
+import { useState, useEffect } from "react";
 import { connect } from "~/utils/phoenixChannel";
 
-const url = "ws://localhost:4000/socket";
-
-function usePhoenixChannel<T extends object>({
+function usePhoenixChannel<T extends object = any>({
   url,
   topic,
   onSendError,
@@ -28,7 +24,6 @@ function usePhoenixChannel<T extends object>({
   channelParams?: object;
 }) {
   const [channel, setChannel] = useState<Channel | null>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
@@ -46,7 +41,6 @@ function usePhoenixChannel<T extends object>({
       channelParams,
     });
     setChannel(channel);
-    setSocket(socket);
 
     return () => {
       channel && channel.leave();
