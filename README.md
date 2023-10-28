@@ -18,28 +18,25 @@ sequenceDiagram
     participant SpeechlyAPI as Speechly API
     participant BrowserB as Browser B
 
-    Note over BrowserA, NextJSBackend: Browser A Interactions
     BrowserA->>+NextJSBackend: Request page load
     NextJSBackend->>BrowserA: Serve page
     BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
     PhoenixServer->>BrowserA: Acknowledge Connection
-    BrowserA->>+SpeechlyAPI: Send audio stream
-    SpeechlyAPI->>BrowserA: Return live audio transcript
-    BrowserA->>+PhoenixServer: Send transcript (User: A)
 
-    Note over BrowserB, NextJSBackend: Browser B Interactions
     BrowserB->>+NextJSBackend: Request page load
     NextJSBackend->>BrowserB: Serve page
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
     PhoenixServer->>BrowserB: Acknowledge Connection
+
+    BrowserA->>+SpeechlyAPI: Send audio stream
+    SpeechlyAPI->>BrowserA: Return live audio transcript
+    BrowserA->>+PhoenixServer: Send transcript (User: A)
+    PhoenixServer->>BrowserB: Broadcast transcript from User A
+
     BrowserB->>+SpeechlyAPI: Send audio stream
     SpeechlyAPI->>BrowserB: Return live audio transcript
     BrowserB->>+PhoenixServer: Send transcript (User: B)
-
-    Note over PhoenixServer: Interaction Between Browsers
-    PhoenixServer->>BrowserB: Broadcast transcript from User A
     PhoenixServer->>BrowserA: Broadcast transcript from User B
-
 ```
 
 ### Workflow Explanation:
