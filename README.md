@@ -4,7 +4,7 @@ Absolutely! Here's a `README.md` for your sandbox project:
 
 # Video Call Live Closed Captioning Sandbox
 
-This project demonstrates a live closed captioning system for video calls using NextJS for the frontend, Speechly for audio transcription, and Phoenix with PubSub for backend real-time interactions.
+This project demonstrates a live closed captioning system for video calls using NextJS for the frontend, WebSpeech for audio transcription, and Phoenix with PubSub for backend real-time interactions.
 
 ## System Flow
 
@@ -12,7 +12,7 @@ Here's a visual representation of the system flow using a Mermaid diagram:
 
 ```mermaid
 sequenceDiagram
-    participant SpeechlyAPI as Speechly API
+    participant WebSpeechAPI as Web Speech API
     participant BrowserA as Browser A
     participant BrowserB as Browser B
     participant NextJSServer as NextJS Server
@@ -28,13 +28,13 @@ sequenceDiagram
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
     PhoenixServer->>BrowserB: Acknowledge Connection
 
-    BrowserA->>+SpeechlyAPI: Send audio stream
-    SpeechlyAPI->>BrowserA: Return live audio transcript
+    BrowserA->>+WebSpeechAPI: Send audio stream
+    WebSpeechAPI->>BrowserA: Return live audio transcript
     BrowserA->>+PhoenixServer: Send transcript (User: A)
     PhoenixServer->>BrowserB: Broadcast transcript from User A
 
-    BrowserB->>+SpeechlyAPI: Send audio stream
-    SpeechlyAPI->>BrowserB: Return live audio transcript
+    BrowserB->>+WebSpeechAPI: Send audio stream
+    WebSpeechAPI->>BrowserB: Return live audio transcript
     BrowserB->>+PhoenixServer: Send transcript (User: B)
     PhoenixServer->>BrowserA: Broadcast transcript from User B
 ```
@@ -43,7 +43,7 @@ sequenceDiagram
 
 1. **Page Load**: Each user (Browser A & Browser B in this example) initially loads the application via the NextJS Backend.
 2. **WebSocket Connection**: Once loaded, each browser establishes a WebSocket connection with the Phoenix Server to be part of a room, identified by a room ID.
-3. **Audio to Transcript**: For closed captioning, each user sends their audio stream to Speechly API, which returns a live audio transcript.
+3. **Audio to Transcript**: For closed captioning, each user sends their audio stream to WebSpeech API, which returns a live audio transcript.
 4. **Transcript Broadcasting**: The returned transcript is then sent to the Phoenix Server, which broadcasts it to all connected users in the room.
 
 ## Prerequisites
