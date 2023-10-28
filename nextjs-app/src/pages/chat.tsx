@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { set } from "zod";
 import usePhoenixChannel from "~/hooks/usePhoenixChannel";
 
 const url = "ws://localhost:4000/socket";
 const chatRoom = 42;
-const username = "John Doe";
 
 type Payload = {
   message: string;
@@ -11,6 +11,7 @@ type Payload = {
 };
 
 function Chat() {
+  const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [received, setReceived] = useState<Payload[]>([]);
 
@@ -37,21 +38,35 @@ function Chat() {
     <div className="m-5 grid w-1/2 grid-cols-3 gap-2">
       <ul className="rounded border border-gray-400 bg-blue-100">
         {received.map((payload, index) => (
-          <li key={index}>{payload.message}</li>
+          <li key={index}>
+            {payload.user}: {payload.message}
+          </li>
         ))}
       </ul>
 
       <textarea
+        placeholder="Message"
         className="rounded border border-gray-400 p-2"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <button
-        className="w-fit rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-        onClick={() => sendMessage("send_message", { message, user: username })}
-      >
-        Send Message
-      </button>
+      <div className="flex flex-col gap-3">
+        <textarea
+          placeholder="Username"
+          className="rounded border border-gray-400 p-2"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button
+          className="w-fit rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          onClick={() => {
+            sendMessage("send_message", { message, user: username });
+            setMessage("");
+          }}
+        >
+          Send Message
+        </button>
+      </div>
     </div>
   );
 }
