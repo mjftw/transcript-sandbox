@@ -1,4 +1,4 @@
-defmodule PhoenixAppWeb.UserSocket do
+defmodule PhoenixAppWeb.MessageSocket do
   use Phoenix.Socket
 
   # A Socket handler
@@ -8,7 +8,7 @@ defmodule PhoenixAppWeb.UserSocket do
 
   ## Channels
 
-  channel("transcript:*", PhoenixAppWeb.TranscriptChannel)
+  channel("chat:*", PhoenixAppWeb.MessageChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
