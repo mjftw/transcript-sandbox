@@ -34,8 +34,10 @@ function Chat() {
     onChannelJoinOk: (resp) => console.log("Joined successfully", resp),
   });
 
+  const isButtonDisabled = !username.trim() || !message.trim() || !connected;
+
   return (
-    <div className="m-5 grid w-1/2 grid-cols-3 gap-2">
+    <div className="m-5 grid grid-cols-3 gap-2">
       <ul className="rounded border border-gray-400 bg-blue-100">
         {received.map((payload, index) => (
           <li key={index}>
@@ -51,18 +53,25 @@ function Chat() {
         onChange={(e) => setMessage(e.target.value)}
       />
       <div className="flex flex-col gap-3">
-        <textarea
+        <input
+          type="text"
           placeholder="Username"
           className="rounded border border-gray-400 p-2"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <button
-          className="w-fit rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+          className={`w-fit rounded px-4 py-2 text-white 
+                    ${
+                      isButtonDisabled
+                        ? "bg-gray-400"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }`}
           onClick={() => {
             sendMessage("send_message", { message, user: username });
             setMessage("");
           }}
+          disabled={isButtonDisabled}
         >
           Send Message
         </button>
