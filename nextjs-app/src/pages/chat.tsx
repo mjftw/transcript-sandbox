@@ -29,8 +29,8 @@ function Chat() {
         },
       },
     ],
-    onJoinError: (resp) => console.log("Unable to join", resp),
-    onJoinOk: (resp) => console.log("Joined successfully", resp),
+    onChannelJoinError: (resp) => console.log("Unable to join", resp),
+    onChannelJoinOk: (resp) => console.log("Joined successfully", resp),
   });
 
   return (

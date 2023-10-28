@@ -3,9 +3,10 @@ import { Channel, Socket } from "phoenix";
 type ConnectionParams<T> = {
   url: string;
   topic: string;
+  setConnected?: (connected: boolean) => void;
   onMessages?: { event: string; callback: (resp: T) => void }[];
-  onJoinOk?: (resp: any) => void;
-  onJoinError?: (resp: any) => void;
+  onChannelJoinOk?: (resp: any) => void;
+  onChannelJoinError?: (resp: any) => void;
   onSocketError?: (error: string | number | Event) => void;
   socketParams?: object;
   channelParams?: object;
@@ -14,9 +15,10 @@ type ConnectionParams<T> = {
 function connect<T>({
   url,
   topic,
+  setConnected = () => {},
   onMessages = [],
-  onJoinOk = () => {},
-  onJoinError = () => {},
+  onChannelJoinOk = () => {},
+  onChannelJoinError = () => {},
   onSocketError,
   socketParams,
   channelParams,
@@ -26,9 +28,19 @@ function connect<T>({
 
   socket.connect(socketParams);
 
+  socket.onOpen(() => setConnected(true));
+  socket.onError((err) => {
+    onSocketError && onSocketError(err);
+    setConnected(false);
+  });
+  socket.onClose(() => setConnected(false));
+
   const channel = socket.channel(topic, channelParams);
 
-  channel.join().receive("ok", onJoinOk).receive("error", onJoinError);
+  channel
+    .join()
+    .receive("ok", onChannelJoinOk)
+    .receive("error", onChannelJoinError);
 
   onMessages.forEach(({ event, callback }) => {
     channel.on(event, callback);

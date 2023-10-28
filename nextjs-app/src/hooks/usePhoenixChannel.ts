@@ -9,8 +9,9 @@ const url = "ws://localhost:4000/socket";
 function usePhoenixChannel<T extends object>({
   url,
   topic,
-  onJoinOk,
-  onJoinError,
+  onSendError,
+  onChannelJoinOk,
+  onChannelJoinError,
   onSocketError,
   onMessages,
   socketParams,
@@ -19,8 +20,9 @@ function usePhoenixChannel<T extends object>({
   url: string;
   topic: string;
   onMessages?: { event: string; callback: (resp: T) => void }[];
-  onJoinOk?: (resp: any) => any;
-  onJoinError?: (resp: any) => any;
+  onSendError?: (error: string) => void;
+  onChannelJoinOk?: (resp: any) => any;
+  onChannelJoinError?: (resp: any) => any;
   onSocketError?: (error: string | number | Event) => void;
   socketParams?: object;
   channelParams?: object;
@@ -34,11 +36,11 @@ function usePhoenixChannel<T extends object>({
       url,
       topic,
       onMessages,
-      onJoinError: (resp) => {
-        setConnected(true);
-        onJoinError && onJoinError(resp);
+      setConnected,
+      onChannelJoinError: (resp) => {
+        onChannelJoinError && onChannelJoinError(resp);
       },
-      onJoinOk,
+      onChannelJoinOk,
       onSocketError,
       socketParams,
       channelParams,
@@ -53,11 +55,10 @@ function usePhoenixChannel<T extends object>({
   }, []);
 
   const sendMessage = (topic: string, payload: T) => {
-    console.log("Connected: ", connected);
-    console.log("Topic: ", topic);
-    console.log("Payload: ", payload);
-    if (channel) {
+    if (channel && connected) {
       channel.push(topic, payload);
+    } else {
+      onSendError && onSendError("Not connected");
     }
   };
 
