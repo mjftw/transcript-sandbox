@@ -10,8 +10,6 @@ import {
 } from "@whereby.com/browser-sdk";
 import usePhoenixChannel from "~/hooks/usePhoenixChannel";
 
-const URL = "ws://localhost:4000/socket";
-
 type TranscriptPayload = {
   message: string;
   user: string;
@@ -22,11 +20,12 @@ type UserTranscripts = {
 };
 
 type Props = {
+  phoenixSocketUrl: string;
   username: string;
   roomUrl: string;
 };
 
-function VideoChat({ username, roomUrl }: Props) {
+function VideoChat({ phoenixSocketUrl, username, roomUrl }: Props) {
   const [othersTranscripts, setOthersTranscripts] =
     React.useState<UserTranscripts>({});
 
@@ -60,7 +59,7 @@ function VideoChat({ username, roomUrl }: Props) {
 
   const { connected: channelConnected, sendMessage } =
     usePhoenixChannel<TranscriptPayload>({
-      url: URL,
+      url: phoenixSocketUrl,
       topic: `chat:${roomUrl}`,
       onMessages: [
         {

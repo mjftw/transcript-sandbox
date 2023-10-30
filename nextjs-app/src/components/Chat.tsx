@@ -1,11 +1,11 @@
 import "regenerator-runtime/runtime";
 import React, { useEffect, useState } from "react";
+import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import usePhoenixChannel from "~/hooks/usePhoenixChannel";
 
-const URL = "ws://localhost:4000/socket";
 const CHAT_ROOM = 42;
 const TOPIC = "send_message";
 
@@ -14,7 +14,11 @@ type Payload = {
   user: string;
 };
 
-function Chat() {
+type Props = {
+  phoenixSocketUrl: string;
+};
+
+function Chat({ phoenixSocketUrl }: Props) {
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [received, setReceived] = useState<Payload[]>([]);
@@ -24,7 +28,7 @@ function Chat() {
   };
 
   const { connected, sendMessage } = usePhoenixChannel<Payload>({
-    url: URL,
+    url: phoenixSocketUrl,
     topic: `chat:${CHAT_ROOM}`,
     onMessages: [
       {

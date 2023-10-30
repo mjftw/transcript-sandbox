@@ -1,5 +1,7 @@
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { env } from "process";
 import { useState } from "react";
 
 // Load WaitingRoom component only on the client side
@@ -7,7 +9,23 @@ const VideoChat = dynamic(() => import("~/components/whereby/VideoChat"), {
   ssr: false,
 });
 
-function Meeting() {
+export const getServerSideProps = (async (context) => {
+  if (!env.PHOENIX_WEBSOCKET_URL) {
+    throw new Error("env.PHOENIX_WEBSOCKET_URL is not set");
+  }
+
+  return {
+    props: {
+      phoenixSocketUrl: env.PHOENIX_WEBSOCKET_URL,
+    },
+  };
+}) satisfies GetServerSideProps<{
+  phoenixSocketUrl: string;
+}>;
+
+function Meeting({
+  phoenixSocketUrl,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [username, setUsername] = useState("");
   const [roomUrl, setRoomUrl] = useState("");
 
@@ -49,7 +67,13 @@ function Meeting() {
       </div>
     );
   } else {
-    return <VideoChat username={username} roomUrl={roomUrl} />;
+    return (
+      <VideoChat
+        phoenixSocketUrl={phoenixSocketUrl}
+        username={username}
+        roomUrl={roomUrl}
+      />
+    );
   }
 }
 
