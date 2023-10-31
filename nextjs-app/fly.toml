@@ -3,7 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "transcript-sandbox-nexjs"
+app = "transcript-sandbox"
 primary_region = "lhr"
 
 [build]
