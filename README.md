@@ -8,35 +8,45 @@ This project demonstrates a live closed captioning system for video calls using 
 
 ## System Flow
 
-Here's a visual representation of the system flow using a Mermaid diagram:
+Here's a visual representation of the system flow of a meeting with transcriptions:
 
 ```mermaid
 sequenceDiagram
+    participant Whereby as Whereby
     participant WebSpeechAPI as Web Speech API
     participant BrowserA as Browser A
     participant BrowserB as Browser B
-    participant NextJSServer as NextJS Server
-    participant PhoenixServer as Phoenix Server
+    participant NextJSFrontend as NextJS Frontend
+    participant PhoenixServer as Phoenix PubSub Server
 
-    BrowserA->>+NextJSServer: Request page load
-    NextJSServer->>BrowserA: Serve page
+    BrowserA->>+NextJSFrontend: Request page load
+    NextJSFrontend-->>BrowserA: Serve page
     BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
-    PhoenixServer->>BrowserA: Acknowledge Connection
+    PhoenixServer-->>BrowserA: Acknowledge Connection
+    BrowserA->>Whereby: Join Whereby meeting
+    Whereby-->>BrowserA: Accept join from Browser A
 
-    BrowserB->>+NextJSServer: Request page load
-    NextJSServer->>BrowserB: Serve page
+    BrowserB->>+NextJSFrontend: Request page load
+    NextJSFrontend-->>BrowserB: Serve page
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
-    PhoenixServer->>BrowserB: Acknowledge Connection
+    PhoenixServer-->>BrowserB: Acknowledge Connection
+    BrowserB->>Whereby: Join Whereby meeting
+    Whereby-->>BrowserB: Accept join from Browser B
+
+    BrowserA->>Whereby: Send video/audio stream to Whereby
+    BrowserB->>Whereby: Send video/audio stream to Whereby
+    Whereby-->>BrowserA: Forward video/audio stream from Browser B
+    Whereby-->>BrowserB: Forward video/audio stream from Browser A
 
     BrowserA->>+WebSpeechAPI: Send audio stream
-    WebSpeechAPI->>BrowserA: Return live audio transcript
+    WebSpeechAPI-->>BrowserA: Return live audio transcript
     BrowserA->>+PhoenixServer: Send transcript (User: A)
-    PhoenixServer->>BrowserB: Broadcast transcript from User A
+    PhoenixServer-->>BrowserB: Broadcast transcript from User A
 
     BrowserB->>+WebSpeechAPI: Send audio stream
-    WebSpeechAPI->>BrowserB: Return live audio transcript
+    WebSpeechAPI-->>BrowserB: Return live audio transcript
     BrowserB->>+PhoenixServer: Send transcript (User: B)
-    PhoenixServer->>BrowserA: Broadcast transcript from User B
+    PhoenixServer-->>BrowserA: Broadcast transcript from User B
 ```
 
 ### Workflow Explanation:
