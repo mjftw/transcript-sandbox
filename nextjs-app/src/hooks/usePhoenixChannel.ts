@@ -1,45 +1,38 @@
 import { Channel, Socket } from "phoenix";
 import { useState, useEffect } from "react";
-import { connect } from "~/utils/phoenixChannel";
+import {
+  Callbacks as SocketCallbacks,
+  Config as SocketConfig,
+  connect,
+} from "~/utils/phoenixChannel";
+
+type HookCallbacks<T> = Omit<SocketCallbacks<T>, "setConnected"> & {
+  onSendError?: (error: string) => void;
+};
+
+type Params<T> = {
+  config: SocketConfig;
+  callbacks: HookCallbacks<T>;
+};
 
 function usePhoenixChannel<T extends object = any>({
-  url,
-  topic,
-  onSendError,
-  onChannelJoinOk,
-  onChannelJoinError,
-  onSocketError,
-  onMessages,
-  socketParams,
-  channelParams,
-}: {
-  url: string;
-  topic: string;
-  onMessages?: { event: string; callback: (resp: T) => void }[];
-  onSendError?: (error: string) => void;
-  onChannelJoinOk?: (resp: any) => any;
-  onChannelJoinError?: (resp: any) => any;
-  onSocketError?: (error: string | number | Event) => void;
-  socketParams?: object;
-  channelParams?: object;
-}) {
+  config,
+  callbacks,
+}: Params<T>) {
   const [channel, setChannel] = useState<Channel | null>(null);
   const [connected, setConnected] = useState(false);
 
+  const { onSendError, ...socketCallbacks } = callbacks;
+
   useEffect(() => {
     const { socket, channel } = connect({
-      url,
-      topic,
-      onMessages,
-      setConnected,
-      onChannelJoinError: (resp) => {
-        onChannelJoinError && onChannelJoinError(resp);
+      config,
+      callbacks: {
+        ...socketCallbacks,
+        setConnected,
       },
-      onChannelJoinOk,
-      onSocketError,
-      socketParams,
-      channelParams,
     });
+
     setChannel(channel);
 
     return () => {

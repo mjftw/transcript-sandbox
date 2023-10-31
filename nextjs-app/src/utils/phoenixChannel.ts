@@ -1,27 +1,34 @@
 import { Channel, Socket } from "phoenix";
 
-type ConnectionParams<T> = {
+type Config = {
   url: string;
   topic: string;
-  setConnected?: (connected: boolean) => void;
-  onMessages?: { event: string; callback: (resp: T) => void }[];
-  onChannelJoinOk?: (resp: any) => void;
-  onChannelJoinError?: (resp: any) => void;
-  onSocketError?: (error: string | number | Event) => void;
   socketParams?: object;
   channelParams?: object;
 };
 
+type Callbacks<T> = {
+  setConnected?: (connected: boolean) => void;
+  onMessages?: { event: string; callback: (resp: T) => void }[];
+  onChannelJoinOk?: (resp: any) => any;
+  onChannelJoinError?: (resp: any) => any;
+  onSocketError?: (error: string | number | Event) => void;
+};
+
+type ConnectionParams<T> = {
+  config: Config;
+  callbacks: Callbacks<T>;
+};
+
 function connect<T>({
-  url,
-  topic,
-  setConnected = () => {},
-  onMessages = [],
-  onChannelJoinOk = () => {},
-  onChannelJoinError = () => {},
-  onSocketError,
-  socketParams,
-  channelParams,
+  config: { url, topic, socketParams, channelParams },
+  callbacks: {
+    setConnected = () => {},
+    onMessages = [],
+    onChannelJoinOk = () => {},
+    onChannelJoinError = () => {},
+    onSocketError = (resp) => {},
+  },
 }: ConnectionParams<T>): { socket: Socket; channel: Channel } {
   const socket = new Socket(url);
   onSocketError && socket.onError((err) => onSocketError(err));
@@ -50,3 +57,4 @@ function connect<T>({
 }
 
 export { connect };
+export type { Config, Callbacks, ConnectionParams };
