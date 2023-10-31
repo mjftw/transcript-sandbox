@@ -15,43 +15,41 @@ sequenceDiagram
     participant NextJSFrontend as NextJS Frontend
     participant PhoenixServer as Phoenix PubSub Server
 
-    note over BrowserA,NextJSFrontend: Load page for Browser A
+    note over BrowserA,NextJSFrontend: Browser A loads the video call page
     BrowserA->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserA: Serve page
 
-    note over BrowserA,Whereby: Join Whereby meeting for Browser A
+    note over BrowserA,Whereby: Browser A joins the Whereby meeting
     BrowserA->>Whereby: Join Whereby meeting
     Whereby-->>BrowserA: Accept join from Browser A
 
-    note over BrowserA,PhoenixServer: Connect to Phoenix Server for Browser A
+    note over BrowserA,PhoenixServer: Browser A connects to Phoenix Server
     BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
     PhoenixServer-->>BrowserA: Acknowledge Connection
 
-    note over BrowserB,NextJSFrontend: Load page for Browser B
+    note over BrowserB,NextJSFrontend: Browser B loads the video call page
     BrowserB->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserB: Serve page
 
-    note over BrowserB,Whereby: Join Whereby meeting for Browser B
+    note over BrowserB,Whereby: Browser B joins the Whereby meeting
     BrowserB->>Whereby: Join Whereby meeting
     Whereby-->>BrowserB: Accept join from Browser B
 
-    note over BrowserB,PhoenixServer: Connect to Phoenix Server for Browser B
+    note over BrowserB,PhoenixServer: Browser B connects to Phoenix Server
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
     PhoenixServer-->>BrowserB: Acknowledge Connection
 
-    note over BrowserA,BrowserB,Whereby: Exchange video/audio streams via Whereby
-    BrowserA->>Whereby: Send video/audio stream to Whereby
+    note over WebSpeechAPI,PhoenixServer: Video call with live transcriptions, data sent from User A
     BrowserB->>Whereby: Send video/audio stream to Whereby
     Whereby-->>BrowserA: Forward video/audio stream from Browser B
-    Whereby-->>BrowserB: Forward video/audio stream from Browser A
-
-    note over BrowserA,WebSpeechAPI,PhoenixServer: Browser A sends audio for transcription and broadcasts to Browser B
     BrowserA->>+WebSpeechAPI: Send audio stream
     WebSpeechAPI-->>BrowserA: Return live audio transcript
     BrowserA->>+PhoenixServer: Send transcript (User: A)
     PhoenixServer-->>BrowserB: Broadcast transcript from User A
 
-    note over BrowserB,WebSpeechAPI,PhoenixServer: Browser B sends audio for transcription and broadcasts to Browser A
+    note over WebSpeechAPI,PhoenixServer: Video call with live transcriptions, data sent from User B
+    BrowserA->>Whereby: Send video/audio stream to Whereby
+    Whereby-->>BrowserB: Forward video/audio stream from Browser A
     BrowserB->>+WebSpeechAPI: Send audio stream
     WebSpeechAPI-->>BrowserB: Return live audio transcript
     BrowserB->>+PhoenixServer: Send transcript (User: B)
