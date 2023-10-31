@@ -64,7 +64,7 @@ function Chat({ phoenixSocketUrl, phoenixSecretKey }: Props) {
 
   useEffect(() => {
     if (!listening) {
-      sendMessage(TOPIC, {
+      sendMessage("send_message", {
         message: transcript,
         user: username,
       });
