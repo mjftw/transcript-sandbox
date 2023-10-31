@@ -41,7 +41,14 @@ if config_env() == :prod do
       """
 
   config(:phoenix_app, websocket_secret: websocket_secret)
-  host = System.get_env("PHX_HOST") || "example.com"
+
+  fly_host = if System.get_env("FLY_APP_NAME") !== nil do
+    System.get_env("FLY_APP_NAME") <> ".fly.dev"
+  else
+    nil
+  end
+
+  host = fly_host || System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :phoenix_app, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
@@ -56,7 +63,8 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
-    secret_key_base: secret_key_base
+    secret_key_base: secret_key_base,
+    check_origin: false
 
   # ## SSL Support
   #
