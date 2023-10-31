@@ -17,17 +17,17 @@ sequenceDiagram
 
     BrowserA->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserA: Serve page
-    BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
-    PhoenixServer-->>BrowserA: Acknowledge Connection
     BrowserA->>Whereby: Join Whereby meeting
     Whereby-->>BrowserA: Accept join from Browser A
+    BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
+    PhoenixServer-->>BrowserA: Acknowledge Connection
 
     BrowserB->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserB: Serve page
-    BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
-    PhoenixServer-->>BrowserB: Acknowledge Connection
     BrowserB->>Whereby: Join Whereby meeting
     Whereby-->>BrowserB: Accept join from Browser B
+    BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
+    PhoenixServer-->>BrowserB: Acknowledge Connection
 
     BrowserA->>Whereby: Send video/audio stream to Whereby
     BrowserB->>Whereby: Send video/audio stream to Whereby
@@ -50,7 +50,8 @@ sequenceDiagram
 1. **Page Load**: Each user (Browser A & Browser B in this example) initially loads the application via the NextJS Backend.
 2. **WebSocket Connection**: Once loaded, each browser establishes a WebSocket connection with the Phoenix Server to be part of a room, identified by a room ID.
 3. **Audio to Transcript**: For closed captioning, each user sends their audio stream to WebSpeech API, which returns a live audio transcript.
-4. **Transcript Broadcasting**: The returned transcript is then sent to the Phoenix Server, which broadcasts it to all connected users in the room.
+4. **Video call**: A separate connection is made to the Whereby servers to join the meeting, which handles transporting audio and video between the participants.
+5. **Transcript Broadcasting**: The returned transcript is then sent to the Phoenix Server, which broadcasts it to all connected users in the room.
 
 ## Prerequisites
 
