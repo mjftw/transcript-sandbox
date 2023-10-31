@@ -15,30 +15,43 @@ sequenceDiagram
     participant NextJSFrontend as NextJS Frontend
     participant PhoenixServer as Phoenix PubSub Server
 
+    note over BrowserA,NextJSFrontend: Load page for Browser A
     BrowserA->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserA: Serve page
+
+    note over BrowserA,Whereby: Join Whereby meeting for Browser A
     BrowserA->>Whereby: Join Whereby meeting
     Whereby-->>BrowserA: Accept join from Browser A
+
+    note over BrowserA,PhoenixServer: Connect to Phoenix Server for Browser A
     BrowserA->>+PhoenixServer: Connect WebSocket (Room: 1234, User: A)
     PhoenixServer-->>BrowserA: Acknowledge Connection
 
+    note over BrowserB,NextJSFrontend: Load page for Browser B
     BrowserB->>+NextJSFrontend: Request page load
     NextJSFrontend-->>BrowserB: Serve page
+
+    note over BrowserB,Whereby: Join Whereby meeting for Browser B
     BrowserB->>Whereby: Join Whereby meeting
     Whereby-->>BrowserB: Accept join from Browser B
+
+    note over BrowserB,PhoenixServer: Connect to Phoenix Server for Browser B
     BrowserB->>+PhoenixServer: Connect WebSocket (Room: 1234, User: B)
     PhoenixServer-->>BrowserB: Acknowledge Connection
 
+    note over BrowserA,BrowserB,Whereby: Exchange video/audio streams via Whereby
     BrowserA->>Whereby: Send video/audio stream to Whereby
     BrowserB->>Whereby: Send video/audio stream to Whereby
     Whereby-->>BrowserA: Forward video/audio stream from Browser B
     Whereby-->>BrowserB: Forward video/audio stream from Browser A
 
+    note over BrowserA,WebSpeechAPI,PhoenixServer: Browser A sends audio for transcription and broadcasts to Browser B
     BrowserA->>+WebSpeechAPI: Send audio stream
     WebSpeechAPI-->>BrowserA: Return live audio transcript
     BrowserA->>+PhoenixServer: Send transcript (User: A)
     PhoenixServer-->>BrowserB: Broadcast transcript from User A
 
+    note over BrowserB,WebSpeechAPI,PhoenixServer: Browser B sends audio for transcription and broadcasts to Browser A
     BrowserB->>+WebSpeechAPI: Send audio stream
     WebSpeechAPI-->>BrowserB: Return live audio transcript
     BrowserB->>+PhoenixServer: Send transcript (User: B)
@@ -111,12 +124,11 @@ The Chat route at [/chat](localhost:3000/chat) provides users with an interactiv
 ### Features
 
 - Live Messaging: Users can exchange messages in real-time.
-- Dynamic Username: Before sending messages, each participant can specify their desired username.
-- Connection Status: The "Send Message" button is intuitive. It remains inactive until a websocket connection is established and a username is input, ensuring that messages are only sent when conditions are optimal.
 - Message dictation: Users can speak to dictate messages. This uses the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API).
   - This currently only works on Chrome or Safari based browsers, but polyfills are available to add the missing support in other browsers.
   - [AWS polyfill](https://github.com/ceuk/speech-recognition-aws-polyfill#:~:text=,AWS%20Transcribe%20as%20a%20fallback)
   - [Azure polyfill](https://github.com/compulim/web-speech-cognitive-services)
+- Video conferencing with live transcription / closed captions
 
 ### What it Looks Like
 
@@ -124,8 +136,8 @@ The Chat route at [/chat](localhost:3000/chat) provides users with an interactiv
 
 ### How to Access
 
-From the main dashboard or homepage, locate and click on the "Chat" link or button.
-Alternatively, you can access it directly by typing in the /chat endpoint in the browser's address bar.
+From the main dashboard or homepage, locate and click on the "Chat" or "Meeting" buttons.
+Alternatively, you can access them directly at the /chat and /meeting endpoints in the browser's address bar.
 
 ### Technical Details
 
