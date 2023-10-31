@@ -16,6 +16,9 @@ config :phoenix_app, PhoenixAppWeb.Endpoint,
   secret_key_base: "ua5NuphIbgT5j1cddulE0P4voVJA+d68q8+u1xlo/4rzXi2F9GMGj8gko7g8CKK/",
   watchers: []
 
+config :phoenix_app,
+  websocket_secret: System.get_env("WEBSOCKET_SECRET", "supersecret")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

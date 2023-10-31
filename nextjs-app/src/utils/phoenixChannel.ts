@@ -1,11 +1,16 @@
 import { Channel, Socket } from "phoenix";
 
-type Config = {
+type SocketConfig = {
   url: string;
-  topic: string;
   socketParams?: object;
+};
+
+type ChannelConfig = {
+  topic: string;
   channelParams?: object;
 };
+
+type Config = SocketConfig & ChannelConfig;
 
 type Callbacks<T> = {
   setConnected?: (connected: boolean) => void;
@@ -21,13 +26,13 @@ type ConnectionParams<T> = {
 };
 
 function connect<T>({
-  config: { url, topic, socketParams, channelParams },
+  config: { url, socketParams, topic, channelParams },
   callbacks: {
     setConnected = () => {},
     onMessages = [],
     onChannelJoinOk = () => {},
     onChannelJoinError = () => {},
-    onSocketError = (resp) => {},
+    onSocketError = () => {},
   },
 }: ConnectionParams<T>): { socket: Socket; channel: Channel } {
   const socket = new Socket(url);
@@ -57,4 +62,10 @@ function connect<T>({
 }
 
 export { connect };
-export type { Config, Callbacks, ConnectionParams };
+export type {
+  SocketConfig,
+  ChannelConfig,
+  Config,
+  Callbacks,
+  ConnectionParams,
+};

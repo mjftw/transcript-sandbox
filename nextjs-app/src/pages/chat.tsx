@@ -11,23 +11,33 @@ export const getServerSideProps = (async (context) => {
     throw new Error("env.PHOENIX_WEBSOCKET_URL is not set");
   }
 
+  if (!env.PHOENIX_WEBSOCKET_SECRET) {
+    throw new Error("env.PHOENIX_WEBSOCKET_SECRET is not set");
+  }
+
   return {
     props: {
       phoenixSocketUrl: env.PHOENIX_WEBSOCKET_URL,
+      phoenixSecretKey: env.PHOENIX_WEBSOCKET_SECRET,
     },
   };
 }) satisfies GetServerSideProps<{
   phoenixSocketUrl: string;
+  phoenixSecretKey: string;
 }>;
 
-function MyComponent({
+function Meeting({
   phoenixSocketUrl,
+  phoenixSecretKey,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
-      <Chat phoenixSocketUrl={phoenixSocketUrl} />
+      <Chat
+        phoenixSocketUrl={phoenixSocketUrl}
+        phoenixSecretKey={phoenixSecretKey}
+      />
     </div>
   );
 }
 
-export default MyComponent;
+export default Meeting;

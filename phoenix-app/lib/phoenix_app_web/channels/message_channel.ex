@@ -23,7 +23,8 @@ defmodule PhoenixAppWeb.MessageChannel do
   end
 
   # Add authorization logic here as required.
-  defp authorized?(_payload) do
-    true
+  defp authorized?(%{"secret" => secret_key}) do
+    dbg({secret_key, Application.get_env(:phoenix_app, :websocket_secret)})
+    Application.get_env(:phoenix_app, :websocket_secret) == secret_key
   end
 end

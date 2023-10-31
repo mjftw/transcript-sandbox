@@ -7,6 +7,9 @@ config :phoenix_app, PhoenixAppWeb.Endpoint,
   secret_key_base: "vY5usZY45moO3c32cnP605IjfvKPIWHYO2u0DAoLREtkdqP1SZYQ7IAk3FTVCy3L",
   server: false
 
+config :phoenix_app,
+  websocket_secret: System.get_env("WEBSOCKET_SECRET", "supersecret")
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 

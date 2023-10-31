@@ -1,8 +1,8 @@
-import { Channel, Socket } from "phoenix";
+import { Channel } from "phoenix";
 import { useState, useEffect } from "react";
 import {
   Callbacks as SocketCallbacks,
-  Config as SocketConfig,
+  Config,
   connect,
 } from "~/utils/phoenixChannel";
 
@@ -11,7 +11,7 @@ type HookCallbacks<T> = Omit<SocketCallbacks<T>, "setConnected"> & {
 };
 
 type Params<T> = {
-  config: SocketConfig;
+  config: Config;
   callbacks: HookCallbacks<T>;
 };
 

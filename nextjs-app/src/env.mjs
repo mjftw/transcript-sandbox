@@ -9,6 +9,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
     PHOENIX_WEBSOCKET_URL: z.string(),
+    PHOENIX_WEBSOCKET_SECRET: z.string(),
   },
 
   /**
@@ -27,6 +28,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     PHOENIX_WEBSOCKET_URL: process.env.PHOENIX_WEBSOCKET_URL,
+    PHOENIX_WEBSOCKET_SECRET: process.env.PHOENIX_WEBSOCKET_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

@@ -1,6 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { env } from "process";
 import { useState } from "react";
 
@@ -14,17 +13,24 @@ export const getServerSideProps = (async (context) => {
     throw new Error("env.PHOENIX_WEBSOCKET_URL is not set");
   }
 
+  if (!env.PHOENIX_WEBSOCKET_SECRET) {
+    throw new Error("env.PHOENIX_WEBSOCKET_SECRET is not set");
+  }
+
   return {
     props: {
       phoenixSocketUrl: env.PHOENIX_WEBSOCKET_URL,
+      phoenixSecretKey: env.PHOENIX_WEBSOCKET_SECRET,
     },
   };
 }) satisfies GetServerSideProps<{
   phoenixSocketUrl: string;
+  phoenixSecretKey: string;
 }>;
 
 function Meeting({
   phoenixSocketUrl,
+  phoenixSecretKey,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [username, setUsername] = useState("");
   const [roomUrl, setRoomUrl] = useState("");
@@ -35,7 +41,7 @@ function Meeting({
 
   if (!joined) {
     return (
-      <div className="w flex flex-col gap-2">
+      <div className="w flex flex-col gap-2 p-2">
         <div>
           <input
             type="text"
@@ -70,6 +76,7 @@ function Meeting({
     return (
       <VideoChat
         phoenixSocketUrl={phoenixSocketUrl}
+        phoenixSecretKey={phoenixSecretKey}
         username={username}
         roomUrl={roomUrl}
       />

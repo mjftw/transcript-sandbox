@@ -33,6 +33,14 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  websocket_secret =
+    System.get_env("WEBSOCKET_SECRET") ||
+      raise """
+      environment variable WEBSOCKET_SECRET is missing.
+      You can generate one by calling: mix phx.gen.secret
+      """
+
+  config(:phoenix_app, websocket_secret: websocket_secret)
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 

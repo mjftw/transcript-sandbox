@@ -21,11 +21,17 @@ type UserTranscripts = {
 
 type Props = {
   phoenixSocketUrl: string;
+  phoenixSecretKey: string;
   username: string;
   roomUrl: string;
 };
 
-function VideoChat({ phoenixSocketUrl, username, roomUrl }: Props) {
+function VideoChat({
+  phoenixSocketUrl,
+  phoenixSecretKey,
+  username,
+  roomUrl,
+}: Props) {
   const [othersTranscripts, setOthersTranscripts] =
     React.useState<UserTranscripts>({});
 
@@ -59,18 +65,23 @@ function VideoChat({ phoenixSocketUrl, username, roomUrl }: Props) {
 
   const { connected: channelConnected, sendMessage } =
     usePhoenixChannel<TranscriptPayload>({
-      url: phoenixSocketUrl,
-      topic: `chat:${roomUrl}`,
-      onMessages: [
-        {
-          event: "new_message",
-          callback: (payload) => {
-            updateOthersTranscripts(payload);
+      config: {
+        url: phoenixSocketUrl,
+        topic: `chat:${roomUrl}`,
+        channelParams: { secret: phoenixSecretKey },
+      },
+      callbacks: {
+        onMessages: [
+          {
+            event: "new_message",
+            callback: (payload) => {
+              updateOthersTranscripts(payload);
+            },
           },
-        },
-      ],
-      onChannelJoinError: (resp) => console.log("Unable to join", resp),
-      onChannelJoinOk: (resp) => console.log("Joined successfully", resp),
+        ],
+        onChannelJoinError: (resp) => console.log("Unable to join", resp),
+        onChannelJoinOk: (resp) => console.log("Joined successfully", resp),
+      },
     });
 
   React.useEffect(() => {

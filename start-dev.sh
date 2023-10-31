@@ -1,13 +1,15 @@
 #!/bin/bash
 
+SECRET_KEY="supersecret"
+
 # Navigate to Phoenix app directory and start the server
 cd phoenix-app
-mix phx.server &
+WEBSOCKET_SECRET=$SECRET_KEY mix phx.server &
 PHOENIX_PID=$!
 
 # Navigate to NextJS app directory and start the server
 cd ../nextjs-app
-npm run dev &
+PHOENIX_WEBSOCKET_SECRET=$SECRET_KEY npm run dev &
 NEXTJS_PID=$!
 
 # Capture termination signals and kill both processes
