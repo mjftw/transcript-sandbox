@@ -48,7 +48,7 @@ function VideoChat({
     displayName: username,
     localMedia,
   });
-  const { remoteParticipants } = state;
+  const { remoteParticipants, roomConnectionStatus } = state;
 
   React.useEffect(() => {
     if (localStream && !listening && browserSupportsSpeechRecognition) {
@@ -67,6 +67,7 @@ function VideoChat({
     usePhoenixChannel<TranscriptPayload>({
       config: {
         url: phoenixSocketUrl,
+        // TODO: remove query params from roomUrl
         topic: `chat:${roomUrl}`,
         channelParams: { secret: phoenixSecretKey },
       },
@@ -105,6 +106,7 @@ function VideoChat({
           </span>
         )}
       </div>
+      <div>Room connection status: {roomConnectionStatus}</div>
       <h1 className="mb-6 text-2xl">Participants</h1>
       <div className="flex flex-col gap-2">
         {remoteParticipants.map((p) => (
