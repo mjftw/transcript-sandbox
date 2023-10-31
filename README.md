@@ -1,10 +1,6 @@
-Absolutely! Here's a `README.md` for your sandbox project:
-
----
-
 # Video Call Live Closed Captioning Sandbox
 
-This project demonstrates a live closed captioning system for video calls using NextJS for the frontend, WebSpeech for audio transcription, and Phoenix with PubSub for backend real-time interactions.
+This project demonstrates a live closed captioning system for video calls using NextJS for the frontend, WebSpeech for audio transcription, and Phoenix with PubSub for backend real-time interactions. [Whereby](https://whereby.com/) is used as the video conferencing provider.
 
 ## System Flow
 
