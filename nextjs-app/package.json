@@ -20,6 +20,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.4.10",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/phoenix": "^1.6.3",

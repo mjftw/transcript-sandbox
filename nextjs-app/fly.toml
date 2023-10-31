@@ -1,0 +1,20 @@
+# fly.toml app configuration file generated for transcript-sandbox-nexjs on 2023-10-30T18:27:29Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "transcript-sandbox-nexjs"
+primary_region = "lhr"
+
+[build]
+
+[env]
+PHOENIX_WEBSOCKET_URL = "wss://transcript-sandbox-phoenix.fly.dev/socket"
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 0
+processes = ["app"]

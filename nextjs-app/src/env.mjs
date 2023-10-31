@@ -8,8 +8,8 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]),
-    PHOENIX_WEBSOCKET_URL: z.string(),
-    PHOENIX_WEBSOCKET_SECRET: z.string(),
+    PHOENIX_WEBSOCKET_URL: z.string().default(""),
+    PHOENIX_WEBSOCKET_SECRET: z.string().default(""),
   },
 
   /**
